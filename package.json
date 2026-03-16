@@ -1,0 +1,22 @@
+{
+  "name": "jurassicclaw",
+  "version": "1.0.0",
+  "description": "Your AI Agents, But They're Dinosaurs.",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node --watch backend/server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "uuid": "^9.0.1",
+    "ws": "^8.17.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": ["ai", "agents", "claude", "dinosaurs", "dashboard", "websocket"],
+  "license": "MIT"
+}

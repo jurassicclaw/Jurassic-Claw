@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    name: Lint & Validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Check for syntax errors
+        run: node --check backend/server.js && node --check backend/agentManager.js && node --check backend/openclawConnector.js && node --check backend/telegramNotifier.js
+
+      - name: Validate package.json
+        run: node -e "require('./package.json'); console.log('✅ package.json valid')"

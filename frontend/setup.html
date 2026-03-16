@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jurassic Claw — Enter the Paddock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark: #0d2b0d;
+    --green-mid: #1a4a1a;
+    --green: #2d7a2d;
+    --green-bright: #4caf50;
+    --amber: #d4a017;
+    --amber-light: #f5c842;
+    --red: #e53e3e;
+    --bg: #070f07;
+    --surface: #0f1f0f;
+    --border: #1e3a1e;
+    --text: #e8f5e8;
+    --muted: #6b9b6b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Animated jungle background */
+  .jungle-bg {
+    position: fixed; inset: 0; z-index: 0;
+    background: 
+      radial-gradient(ellipse at 20% 80%, rgba(45,122,45,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(13,43,13,0.3) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(10,20,10,0.5) 0%, transparent 70%);
+  }
+
+  .grid-lines {
+    position: fixed; inset: 0; z-index: 0;
+    background-image: 
+      linear-gradient(rgba(45,122,45,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(45,122,45,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridDrift 20s linear infinite;
+  }
+
+  @keyframes gridDrift {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(60px); }
+  }
+
+  .dinos-bg {
+    position: fixed; inset: 0; z-index: 0; overflow: hidden;
+    pointer-events: none;
+  }
+
+  .dino-float {
+    position: absolute;
+    font-size: 80px;
+    opacity: 0.04;
+    animation: floatDino linear infinite;
+  }
+
+  @keyframes floatDino {
+    0% { transform: translateX(-200px) translateY(0) rotate(-5deg); opacity: 0; }
+    10% { opacity: 0.04; }
+    90% { opacity: 0.04; }
+    100% { transform: translateX(calc(100vw + 200px)) translateY(-100px) rotate(5deg); opacity: 0; }
+  }
+
+  /* Main card */
+  .card {
+    position: relative; z-index: 10;
+    background: rgba(15,31,15,0.9);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 60px 52px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(45,122,45,0.1), inset 0 1px 0 rgba(255,255,255,0.03);
+    backdrop-filter: blur(20px);
+  }
+
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--muted); font-size: 13px; text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 40px;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--green-bright); }
+
+  .logo {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .logo-emoji { font-size: 36px; line-height: 1; }
+
+  .logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 3px;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .tagline {
+    font-size: 13px; color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 48px;
+    letter-spacing: 0.5px;
+  }
+
+  .tagline span { color: var(--amber); }
+
+  h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 18px; font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .hint {
+    font-size: 12px; color: var(--muted);
+    margin-bottom: 20px; line-height: 1.5;
+  }
+
+  .hint a { color: var(--green-bright); text-decoration: none; }
+
+  .input-wrap { position: relative; margin-bottom: 16px; }
+
+  input[type="text"], input[type="password"] {
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 14px 48px 14px 16px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.5px;
+  }
+
+  input:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(45,122,45,0.15);
+  }
+
+  input.error { border-color: var(--red); }
+  input.valid { border-color: var(--green-bright); }
+
+  .eye-btn {
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer;
+    color: var(--muted); font-size: 16px; padding: 4px;
+    transition: color 0.2s;
+  }
+  .eye-btn:hover { color: var(--text); }
+
+  .btn {
+    width: 100%; padding: 16px;
+    background: var(--green);
+    border: none; border-radius: 2px;
+    color: white; font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px; letter-spacing: 3px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .btn:hover { background: var(--green-bright); box-shadow: 0 8px 24px rgba(45,122,45,0.4); }
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .btn-inner { position: relative; z-index: 1; }
+
+  .error-msg {
+    color: var(--red); font-size: 12px; margin-top: 8px;
+    font-family: 'DM Mono', monospace;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+
+  .divider {
+    border: none; border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  .features {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .feature {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 12px; color: var(--muted); line-height: 1.4;
+  }
+
+  .feature-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  .loading-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: var(--bg);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .loading-overlay.show { opacity: 1; pointer-events: all; }
+
+  .loading-dino {
+    font-size: 64px;
+    animation: roar 0.8s ease-in-out infinite alternate;
+  }
+
+  @keyframes roar {
+    0% { transform: scale(1) rotate(-5deg); }
+    100% { transform: scale(1.15) rotate(5deg); }
+  }
+
+  .loading-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px; letter-spacing: 4px;
+    color: var(--green-bright);
+  }
+</style>
+</head>
+<body>
+
+<div class="jungle-bg"></div>
+<div class="grid-lines"></div>
+<div class="dinos-bg" id="dinosBg"></div>
+
+<div class="card">
+  <a href="/" class="back-link">← Back to home</a>
+
+  <div class="logo">
+    <span class="logo-emoji">🦕</span>
+    <span class="logo-text">JURASSIC CLAW</span>
+  </div>
+  <p class="tagline">Your AI Agents, But They're <span>Dinosaurs.</span></p>
+
+  <h2>Enter Your Anthropic API Key</h2>
+  <p class="hint">
+    Your key is stored in <strong>localStorage only</strong> — never sent to our server except during registration. 
+    Get your key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>
+  </p>
+
+  <div class="input-wrap">
+    <input type="password" id="apiKey" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false">
+    <button class="eye-btn" id="eyeBtn" onclick="toggleVisibility()">👁</button>
+  </div>
+  <div class="error-msg" id="errorMsg"></div>
+
+  <button class="btn" id="enterBtn" onclick="handleEnter()">
+    <span class="btn-inner">🦕 ENTER THE PADDOCK</span>
+  </button>
+
+  <hr class="divider">
+
+  <div class="features">
+    <div class="feature"><span class="feature-icon">🔒</span><span>API key never stored on server</span></div>
+    <div class="feature"><span class="feature-icon">⚡</span><span>Real-time WebSocket updates</span></div>
+    <div class="feature"><span class="feature-icon">🦖</span><span>Watch agents as live dinos</span></div>
+    <div class="feature"><span class="feature-icon">📂</span><span>View agent-created files</span></div>
+    <div class="feature"><span class="feature-icon">💬</span><span>Chat with running agents</span></div>
+    <div class="feature"><span class="feature-icon">🆓</span><span>Free & open source (MIT)</span></div>
+  </div>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-dino">🦕</div>
+  <div class="loading-text">ENTERING PADDOCK...</div>
+</div>
+
+<script>
+  // Animated background dinos
+  const dinosBg = document.getElementById('dinosBg');
+  const dinoEmojis = ['🦕', '🦖', '🦴', '🥚', '🦕', '🦖'];
+  for (let i = 0; i < 6; i++) {
+    const el = document.createElement('div');
+    el.className = 'dino-float';
+    el.textContent = dinoEmojis[i % dinoEmojis.length];
+    el.style.top = `${Math.random() * 80 + 10}%`;
+    el.style.animationDuration = `${15 + Math.random() * 20}s`;
+    el.style.animationDelay = `${-Math.random() * 20}s`;
+    el.style.fontSize = `${40 + Math.random() * 80}px`;
+    dinosBg.appendChild(el);
+  }
+
+  // Session ID
+  let sessionId = localStorage.getItem('jc_session');
+  if (!sessionId) {
+    sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('jc_session', sessionId);
+  }
+
+  // Pre-fill if key exists
+  const savedKey = localStorage.getItem('jc_api_key');
+  if (savedKey) document.getElementById('apiKey').value = savedKey;
+
+  function toggleVisibility() {
+    const input = document.getElementById('apiKey');
+    const btn = document.getElementById('eyeBtn');
+    if (input.type === 'password') {
+      input.type = 'text';
+      btn.textContent = '🙈';
+    } else {
+      input.type = 'password';
+      btn.textContent = '👁';
+    }
+  }
+
+  async function handleEnter() {
+    const apiKey = document.getElementById('apiKey').value.trim();
+    const errorMsg = document.getElementById('errorMsg');
+    const input = document.getElementById('apiKey');
+    const btn = document.getElementById('enterBtn');
+
+    errorMsg.className = 'error-msg';
+    input.className = '';
+
+    if (!apiKey) {
+      errorMsg.textContent = '⚠ Please enter your Anthropic API key';
+      errorMsg.className = 'error-msg show';
+      input.className = 'error';
+      return;
+    }
+
+    if (!apiKey.startsWith('sk-ant-')) {
+      errorMsg.textContent = '⚠ Key should start with sk-ant-';
+      errorMsg.className = 'error-msg show';
+      input.className = 'error';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.querySelector('.btn-inner').textContent = '🦕 Validating...';
+
+    try {
+      const res = await fetch('/api/auth/apikey', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ apiKey, sessionId })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        localStorage.setItem('jc_api_key', apiKey);
+        input.className = 'valid';
+        document.getElementById('loadingOverlay').className = 'loading-overlay show';
+        setTimeout(() => { window.location.href = '/dashboard'; }, 1200);
+      } else {
+        throw new Error(data.error || 'Registration failed');
+      }
+    } catch (err) {
+      errorMsg.textContent = '⚠ ' + err.message;
+      errorMsg.className = 'error-msg show';
+      input.className = 'error';
+      btn.disabled = false;
+      btn.querySelector('.btn-inner').textContent = '🦕 ENTER THE PADDOCK';
+    }
+  }
+
+  document.getElementById('apiKey').addEventListener('keypress', e => {
+    if (e.key === 'Enter') handleEnter();
+  });
+</script>
+</body>
+</html>

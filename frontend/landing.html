@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jurassic Claw — Your AI Agents, But They're Dinosaurs.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark: #0d2b0d;
+    --green-mid: #1a4a1a;
+    --green: #2d7a2d;
+    --green-bright: #4caf50;
+    --green-glow: rgba(76,175,80,0.3);
+    --amber: #d4a017;
+    --amber-light: #f5c842;
+    --bg: #060e06;
+    --surface: #0f1f0f;
+    --border: #1a341a;
+    --text: #e8f5e8;
+    --muted: #5a8a5a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 48px;
+    background: rgba(6,14,6,0.8);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(45,122,45,0.1);
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px; letter-spacing: 3px;
+    color: var(--text); text-decoration: none;
+  }
+
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+
+  .nav-links a {
+    color: var(--muted); font-size: 14px; text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    transition: color 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .nav-links a:hover { color: var(--green-bright); }
+
+  .nav-cta {
+    background: var(--green) !important;
+    color: white !important;
+    padding: 8px 20px;
+    border-radius: 2px;
+    font-family: 'Bebas Neue', sans-serif !important;
+    font-size: 15px !important;
+    letter-spacing: 2px !important;
+    transition: background 0.2s !important, box-shadow 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--green-bright) !important; box-shadow: 0 4px 20px rgba(45,122,45,0.4) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    padding: 120px 48px 80px;
+    text-align: center;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 40%, rgba(45,122,45,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 30% 40% at 30% 70%, rgba(13,43,13,0.4) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 70% 30%, rgba(30,52,30,0.2) 0%, transparent 60%);
+  }
+
+  .scan-lines {
+    position: absolute; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  }
+
+  .hero-content { position: relative; z-index: 1; max-width: 800px; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(45,122,45,0.15);
+    border: 1px solid rgba(45,122,45,0.3);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 12px; font-family: 'DM Mono', monospace;
+    color: var(--green-bright); letter-spacing: 1px;
+    margin-bottom: 32px;
+    animation: badgePulse 3s ease-in-out infinite;
+  }
+
+  @keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(76,175,80,0); }
+    50% { box-shadow: 0 0 0 6px rgba(76,175,80,0.1); }
+  }
+
+  .live-dot { width: 6px; height: 6px; background: var(--green-bright); border-radius: 50%; animation: blink 1s step-end infinite; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+  .hero-emoji {
+    font-size: 80px; line-height: 1;
+    display: block; margin-bottom: 24px;
+    animation: dinoHover 4s ease-in-out infinite;
+  }
+
+  @keyframes dinoHover {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-12px) rotate(2deg); }
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 9vw, 120px);
+    line-height: 0.9;
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  h1 .accent { color: var(--green-bright); }
+
+  .hero-sub {
+    font-size: 20px; color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 48px;
+    line-height: 1.5;
+  }
+
+  .hero-sub em { color: var(--amber); font-style: normal; }
+
+  .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--green);
+    color: white; text-decoration: none;
+    padding: 18px 36px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; letter-spacing: 3px;
+    border-radius: 2px;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+  }
+  .btn-primary:hover { background: var(--green-bright); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(45,122,45,0.5); }
+
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: transparent;
+    color: var(--text); text-decoration: none;
+    padding: 18px 36px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; letter-spacing: 3px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    transition: border-color 0.2s, color 0.2s, transform 0.1s;
+  }
+  .btn-secondary:hover { border-color: var(--green); color: var(--green-bright); transform: translateY(-2px); }
+
+  /* ── PADDOCK DEMO ── */
+  .paddock-section {
+    padding: 80px 48px;
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--muted);
+    letter-spacing: 3px; text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px; letter-spacing: 2px;
+    margin-bottom: 48px; line-height: 1;
+  }
+
+  /* Mock dashboard */
+  .mock-dashboard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  }
+
+  .mock-topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px;
+    background: rgba(0,0,0,0.4);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mock-dots { display: flex; gap: 6px; }
+  .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .mock-dot.r { background: #e53e3e; }
+  .mock-dot.y { background: #d4a017; }
+  .mock-dot.g { background: var(--green-bright); }
+
+  .mock-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; color: var(--muted);
+  }
+
+  .paddock-canvas {
+    height: 300px; position: relative; overflow: hidden;
+    background: linear-gradient(180deg, #060e06 0%, #0a1a0a 50%, #0d2b0d 100%);
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Ground */
+  .ground {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 40px;
+    background: linear-gradient(180deg, transparent, rgba(13,43,13,0.6));
+    border-top: 1px solid rgba(45,122,45,0.2);
+  }
+
+  /* Trees */
+  .tree {
+    position: absolute; bottom: 40px;
+    font-size: 48px; opacity: 0.3;
+    user-select: none;
+  }
+
+  /* Agent dinos */
+  .agent-dino {
+    position: absolute;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 4px; cursor: pointer;
+  }
+
+  .dino-emoji {
+    font-size: 36px;
+    transition: transform 0.3s;
+    filter: drop-shadow(0 0 8px currentColor);
+  }
+
+  .dino-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; white-space: nowrap;
+    padding: 2px 6px;
+    border-radius: 2px;
+    background: rgba(0,0,0,0.6);
+  }
+
+  .status-bar {
+    height: 3px; width: 40px;
+    border-radius: 2px;
+    margin-top: 2px;
+  }
+
+  /* Status colors */
+  .status-active .dino-emoji { animation: charge 0.4s ease-in-out infinite alternate; }
+  .status-active .dino-label { color: var(--green-bright); border: 1px solid rgba(76,175,80,0.3); }
+  .status-active .status-bar { background: var(--green-bright); animation: barPulse 0.4s ease-in-out infinite alternate; }
+
+  .status-thinking .dino-emoji { animation: trot 1s ease-in-out infinite alternate; }
+  .status-thinking .dino-label { color: #4dd0e1; border: 1px solid rgba(77,208,225,0.3); }
+  .status-thinking .status-bar { background: #4dd0e1; }
+
+  .status-idle .dino-emoji { animation: graze 3s ease-in-out infinite alternate; }
+  .status-idle .dino-label { color: var(--amber); border: 1px solid rgba(212,160,23,0.3); }
+  .status-idle .status-bar { background: var(--amber); }
+
+  .status-done .dino-emoji { animation: rest 4s ease-in-out infinite alternate; }
+  .status-done .dino-label { color: #bdbdbd; border: 1px solid rgba(189,189,189,0.3); }
+  .status-done .status-bar { background: #bdbdbd; }
+
+  .status-error .dino-emoji { animation: stomp 0.2s ease-in-out infinite alternate; }
+  .status-error .dino-label { color: #e53e3e; border: 1px solid rgba(229,62,62,0.3); }
+  .status-error .status-bar { background: #e53e3e; }
+
+  @keyframes charge { 0% { transform: translateX(-4px) rotate(-5deg) scaleX(1); } 100% { transform: translateX(4px) rotate(5deg) scaleX(-1); } }
+  @keyframes trot { 0% { transform: translateX(-2px) rotate(-3deg); } 100% { transform: translateX(2px) rotate(3deg); } }
+  @keyframes graze { 0% { transform: translateX(-1px) rotate(-2deg); } 100% { transform: translateX(1px) rotate(1deg); } }
+  @keyframes rest { 0% { transform: translateY(0) rotate(-1deg); } 100% { transform: translateY(-3px) rotate(1deg); } }
+  @keyframes stomp { 0% { transform: translateX(-5px) rotate(-8deg); } 100% { transform: translateX(5px) rotate(8deg); } }
+  @keyframes barPulse { 0% { opacity: 0.6; } 100% { opacity: 1; } }
+
+  /* Status legend */
+  .mock-statusbar {
+    display: flex; gap: 24px; padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .status-item {
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    color: var(--muted);
+  }
+
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* ── FEATURES ── */
+  .features-section {
+    padding: 80px 48px;
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    padding: 36px;
+    transition: background 0.2s;
+  }
+  .feature-card:hover { background: rgba(45,122,45,0.05); }
+
+  .feature-icon { font-size: 28px; margin-bottom: 16px; display: block; }
+
+  .feature-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600; font-size: 17px;
+    margin-bottom: 8px;
+  }
+
+  .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* ── DINO STATUS ── */
+  .status-section {
+    padding: 80px 48px;
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  .status-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .status-table th {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--muted);
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  .status-table td {
+    border: 1px solid var(--border);
+    padding: 16px;
+    color: var(--text);
+    vertical-align: middle;
+  }
+
+  .status-table tr:hover td { background: rgba(45,122,45,0.04); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 24px;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; letter-spacing: 3px;
+    color: var(--muted);
+  }
+
+  .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+  .footer-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 13px; font-family: 'DM Mono', monospace;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--green-bright); }
+
+  .footer-legal { font-size: 12px; color: rgba(90,138,90,0.5); font-family: 'DM Mono', monospace; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">🦕 JURASSIC CLAW</a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="https://github.com/jurassicclaw/Jurassicclaw" target="_blank">GitHub</a>
+    <a href="https://t.me/jurassicclaw" target="_blank">Telegram</a>
+    <a href="/setup" class="nav-cta">Enter Paddock</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="scan-lines"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="live-dot"></span>
+      LIVE ON RAILWAY · OPEN SOURCE MIT
+    </div>
+
+    <span class="hero-emoji">🦕</span>
+
+    <h1>
+      JURASSIC<br><span class="accent">CLAW</span>
+    </h1>
+
+    <p class="hero-sub">
+      Your AI Agents, But They're <em>Dinosaurs.</em><br>
+      Monitor Claude agents as roaming dinos in a live paddock.
+    </p>
+
+    <div class="hero-btns">
+      <a href="/setup" class="btn-primary">🦕 Enter the Paddock</a>
+      <a href="https://github.com/jurassicclaw/Jurassicclaw" target="_blank" class="btn-secondary">⭐ Star on GitHub</a>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE PADDOCK DEMO -->
+<section class="paddock-section">
+  <div class="section-label">// live demo</div>
+  <h2 class="section-title">THE PADDOCK</h2>
+
+  <div class="mock-dashboard">
+    <div class="mock-topbar">
+      <div class="mock-dots">
+        <div class="mock-dot r"></div>
+        <div class="mock-dot y"></div>
+        <div class="mock-dot g"></div>
+      </div>
+      <div class="mock-title">jurassic-claw — paddock · 4 agents active</div>
+      <div style="font-family:DM Mono,monospace;font-size:11px;color:var(--muted)">⚡ WS LIVE</div>
+    </div>
+
+    <div class="paddock-canvas" id="paddock">
+      <div class="tree" style="left:5%;font-size:56px">🌴</div>
+      <div class="tree" style="left:18%;font-size:40px">🌿</div>
+      <div class="tree" style="left:72%;font-size:64px">🌳</div>
+      <div class="tree" style="left:88%;font-size:44px">🌴</div>
+      <div class="tree" style="left:45%;font-size:32px;bottom:60px">🌿</div>
+
+      <!-- Demo dinos -->
+      <div class="agent-dino status-active" style="left:12%;bottom:60px" id="dino1">
+        <div class="dino-emoji">🦖</div>
+        <div class="dino-label">REX · active</div>
+        <div class="status-bar"></div>
+      </div>
+
+      <div class="agent-dino status-thinking" style="left:32%;bottom:55px" id="dino2">
+        <div class="dino-emoji">🦕</div>
+        <div class="dino-label">SAUR · thinking</div>
+        <div class="status-bar"></div>
+      </div>
+
+      <div class="agent-dino status-idle" style="left:55%;bottom:58px" id="dino3">
+        <div class="dino-emoji">🦕</div>
+        <div class="dino-label">BRONTO · idle</div>
+        <div class="status-bar"></div>
+      </div>
+
+      <div class="agent-dino status-done" style="left:76%;bottom:62px" id="dino4">
+        <div class="dino-emoji">🦖</div>
+        <div class="dino-label">RAPTOR · done ✓</div>
+        <div class="status-bar"></div>
+      </div>
+
+      <div class="ground"></div>
+    </div>
+
+    <div class="mock-statusbar">
+      <div class="status-item"><div class="status-dot" style="background:#4caf50"></div> Active — charging sprint</div>
+      <div class="status-item"><div class="status-dot" style="background:#4dd0e1"></div> Thinking — steady trot</div>
+      <div class="status-item"><div class="status-dot" style="background:#d4a017"></div> Idle — slow graze</div>
+      <div class="status-item"><div class="status-dot" style="background:#bdbdbd"></div> Done — gentle rest</div>
+      <div class="status-item"><div class="status-dot" style="background:#e53e3e"></div> Error — erratic stomp</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="section-label">// core features</div>
+  <h2 class="section-title">BUILT FOR BUILDERS</h2>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">🦕</span>
+      <div class="feature-title">Live Paddock</div>
+      <div class="feature-desc">Each AI agent appears as an animated dinosaur. Speed reflects workload, color reflects status. Watch your agents roam in real-time.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">⚡</span>
+      <div class="feature-title">Real-time WebSocket</div>
+      <div class="feature-desc">Every log line, tool call, and status change streams instantly to your dashboard via WebSocket. Zero polling, zero lag.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔒</span>
+      <div class="feature-title">BYOK — Your Keys</div>
+      <div class="feature-desc">Bring Your Own API Key. Stored in localStorage only, never persisted on server. 100% private. We never see your key.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">💬</span>
+      <div class="feature-title">Direct Chat</div>
+      <div class="feature-desc">Chat directly with any running agent. Ask it what it's working on, redirect it, or give feedback — all in real-time.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📂</span>
+      <div class="feature-title">Files Tab</div>
+      <div class="feature-desc">View and download any file your agents create in the workspace. Research reports, code, data — all accessible instantly.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔌</span>
+      <div class="feature-title">OpenClaw Protocol</div>
+      <div class="feature-desc">Connect external agents (LangChain, CrewAI, custom) to the paddock. Any agent with a /status endpoint gets its own dino.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📱</span>
+      <div class="feature-title">Telegram Notifications</div>
+      <div class="feature-desc">Get notified on agent spawn, completion, error, and OpenClaw discovery. Your dinos report to your phone.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🆓</span>
+      <div class="feature-title">Free & Open Source</div>
+      <div class="feature-desc">MIT license. Full codebase on GitHub. No subscription, no credit card, no telemetry. Deploy your own or use ours.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">🦕 JURASSIC CLAW</div>
+  <div class="footer-links">
+    <a href="/setup">Launch App</a>
+    <a href="https://github.com/jurassicclaw/Jurassicclaw" target="_blank">GitHub</a>
+    <a href="https://x.com/jurassicclaw" target="_blank">Twitter/X</a>
+    <a href="https://t.me/jurassicclaw" target="_blank">Telegram</a>
+    <a href="/setup">Docs</a>
+  </div>
+  <div class="footer-legal">MIT LICENSE · JURASSICCLAW.XYZ · 2026</div>
+</footer>
+
+<script>
+  // Animate dinos moving across paddock
+  const dinos = [
+    { el: document.getElementById('dino1'), speed: 0.8, dir: 1, x: 12 },
+    { el: document.getElementById('dino2'), speed: 0.4, dir: -1, x: 32 },
+    { el: document.getElementById('dino3'), speed: 0.2, dir: 1, x: 55 },
+    { el: document.getElementById('dino4'), speed: 0.5, dir: -1, x: 76 },
+  ];
+
+  function animatePaddock() {
+    dinos.forEach(d => {
+      d.x += d.speed * d.dir * 0.05;
+      if (d.x > 85) d.dir = -1;
+      if (d.x < 5) d.dir = 1;
+      d.el.style.left = d.x + '%';
+    });
+    requestAnimationFrame(animatePaddock);
+  }
+  animatePaddock();
+</script>
+
+</body>
+</html>
