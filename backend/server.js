@@ -114,6 +114,7 @@ app.get('/api/workspace/files/:name', (req, res) => {
 
 // ─── Routes ───────────────────────────────────────────────────
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '../frontend/landing.html')));
+app.get('/landing', (req, res) => res.sendFile(path.join(__dirname, '../frontend/landing.html')));
 app.get('/dashboard', (req, res) => res.sendFile(path.join(__dirname, '../frontend/dashboard.html')));
 app.get('/setup', (req, res) => res.sendFile(path.join(__dirname, '../frontend/setup.html')));
 
