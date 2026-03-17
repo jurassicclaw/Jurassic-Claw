@@ -22,7 +22,7 @@ No more staring at terminal logs — watch your agents *charge*, *graze*, and *r
 
 <br/>
 
-[**🦕 Launch App**](https://jurassicclaw-production.up.railway.app) · [**Quick Start**](#-quick-start) · [**OpenClaw Protocol**](#-openclaw-protocol) · [**$JURA Token**](#-jura-token)
+[**🦕 Launch App**](https://jurassic-claw-production.up.railway.app) · [**Quick Start**](#-quick-start) · [**OpenClaw Protocol**](#-openclaw-protocol) · [**Wiki**](../../wiki) · [**$JURA Token**](#-jura-token)
 
 </div>
 
@@ -64,7 +64,7 @@ Built on top of Anthropic's Claude API with a **Bring Your Own Key (BYOK)** mode
 ### Option A — Use the hosted version
 
 ```
-https://jurassicclaw-production.up.railway.app
+https://jurassic-claw-production.up.railway.app
 ```
 
 Paste your Anthropic API key and start spawning agents immediately.
@@ -153,6 +153,31 @@ Jurassic Claw auto-scans ports **8000–8020** on startup and every 30s. Once di
 
 <br/>
 
+## 📱 Telegram Notifications
+
+Get notified every time an agent event happens — directly in your Telegram.
+
+**Events:**
+- 🦕 Agent spawned
+- ✅ Task completed
+- ❌ Agent error
+- 🔌 OpenClaw agent discovered
+
+**Setup:**
+
+```bash
+# 1. Create a bot via @BotFather on Telegram → /newbot
+# 2. Copy the bot token
+# 3. Add to your .env:
+TELEGRAM_BOT_TOKEN=your_bot_token
+TELEGRAM_CHAT_ID=your_chat_or_channel_id
+# 4. Restart server
+```
+
+> Your dinos will text you. 📲
+
+<br/>
+
 ## 🗂️ Project Structure
 
 ```
@@ -217,9 +242,9 @@ PORT=3333
 
 ```
 Phase 1  ✅  Mystery campaign · Dashboard built · WebSocket · Telegram · OpenClaw
-Phase 2  ✅  Hard reveal · Demo video · GitHub open source · Telegram community
-Phase 3  ⚡  OpenClaw integrations · Leaderboard · Usage stats · Weekly updates
-Phase 4  🔜  Team workspaces · Agent templates · Paddock of the Week
+Phase 2  ✅  Hard reveal · GitHub open source · Telegram Notify · OpenClaw live · Wiki
+Phase 3  ⚡  Leaderboard · Agent templates · Usage stats · Weekly updates
+Phase 4  🔜  Team workspaces · Paddock of the Week · Public showcase
 Phase 5  🦕  $JURA on Solana · Token gating · Free agent runs · Governance
 ```
 
@@ -260,6 +285,8 @@ git checkout -b feature/my-feature
 git commit -m "✨ add my feature"
 git push origin feature/my-feature
 ```
+
+**Wiki:** Full documentation available at [github.com/jurassicclaw/Jurassicclaw/wiki](../../wiki)
 
 **Areas we'd love help with:**
 - 🔌 OpenClaw adapters for LangChain, CrewAI, AutoGen, ElizaOS
