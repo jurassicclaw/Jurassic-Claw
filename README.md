@@ -241,10 +241,10 @@ PORT=3333
 ## 🗺️ Roadmap
 
 ```
-Phase 1  ✅  Mystery campaign · Dashboard built · WebSocket · Telegram · OpenClaw
-Phase 2  ✅  Hard reveal · GitHub open source · Telegram Notify · OpenClaw live · Wiki
-Phase 3  ⚡  Leaderboard · Agent templates · Usage stats · Weekly updates
-Phase 4  🔜  Team workspaces · Paddock of the Week · Public showcase
+Phase 1  ✅  Dashboard · WebSocket · Telegram · OpenClaw protocol
+Phase 2  ✅  Hard reveal · GitHub open source · Telegram Notify · OpenClaw · Wiki
+Phase 3  ⚡  v1.0.0 release · Good First Issues · Discussions · Leaderboard
+Phase 4  🔜  Team workspaces · Agent templates · Paddock of the Week
 Phase 5  🦕  $JURA on Solana · Token gating · Free agent runs · Governance
 ```
 
@@ -286,7 +286,11 @@ git commit -m "✨ add my feature"
 git push origin feature/my-feature
 ```
 
-**Wiki:** Full documentation available at [github.com/jurassicclaw/Jurassicclaw/wiki](../../wiki)
+**Wiki:** Full documentation at [github.com/jurassicclaw/Jurassicclaw/wiki](../../wiki)
+
+**Good First Issues:** Check the [issues page](https://github.com/jurassicclaw/Jurassicclaw/issues?q=label%3A%22good+first+issue%22) for beginner-friendly tasks.
+
+**Discussions:** Share your paddock setup, ideas, and feedback in [GitHub Discussions](https://github.com/jurassicclaw/Jurassicclaw/discussions).
 
 **Areas we'd love help with:**
 - 🔌 OpenClaw adapters for LangChain, CrewAI, AutoGen, ElizaOS
